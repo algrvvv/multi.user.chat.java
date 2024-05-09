@@ -39,7 +39,7 @@ public class ClientInstance {
         }
 
         try {
-            userReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            userReader = new BufferedReader(new InputStreamReader(System.in));
             reader  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer  = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -64,7 +64,7 @@ public class ClientInstance {
         try {
             if (!socket.isClosed()) {
                 socket.close(); reader.close();
-                userReader.close(); writer.close();
+                writer.close();
             }
         } catch (IOException ignored) {}
     }

@@ -33,6 +33,8 @@ public class ServerInstance extends Thread {
         this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "Cp866"));
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
 
+        Server.store.printMessageStore(writer);
+
         // запуск нити
         this.start();
     }

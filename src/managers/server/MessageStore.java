@@ -30,7 +30,7 @@ public class MessageStore {
      *
      * @param writer поток вывода для каждого клиента
      */
-    public void writeMessage(BufferedWriter writer) {
+    public void printMessageStore(BufferedWriter writer) {
         if (!this.store.isEmpty()) {
             try {
                 writer.write("История сообщений: " + "\n");
@@ -38,7 +38,7 @@ public class MessageStore {
                     writer.write(message + "\n");
                 }
 
-                writer.write("/..." + "\n");
+                writer.write("\n");
                 writer.flush();
             } catch (IOException ignored) {}
         }

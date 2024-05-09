@@ -34,6 +34,7 @@ public class ServerInstance extends Thread {
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
 
         Server.store.printMessageStore(writer);
+        System.out.println("К чату подключился новый пользователь!");
 
         // запуск нити
         this.start();
@@ -69,7 +70,7 @@ public class ServerInstance extends Thread {
         }
     }
 
-    private void sendMessage(String message) {
+    public void sendMessage(String message) {
         try {
             writer.write(message + "\n");
             writer.flush();

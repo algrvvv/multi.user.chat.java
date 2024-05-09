@@ -26,6 +26,7 @@ public class Server {
 
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) throws IOException {
+        System.out.println("Запуск севера");
         store = new MessageStore();
         try (ServerSocket server = new ServerSocket(PORT)) {
             while (true) {

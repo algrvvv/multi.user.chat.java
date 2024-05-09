@@ -1,5 +1,7 @@
 package managers.client;
 
+import managers.server.UserController;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -44,9 +46,12 @@ public class ClientInstance {
             reader  = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
             writer  = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "Cp866"));
 
+
             this.getUserName();
+
             new MessageReader().start();
             new MessageWriter().start();
+            UserController.newUser(userName);
         } catch (IOException e) {
             ClientInstance.this.downService();
         }
@@ -58,7 +63,7 @@ public class ClientInstance {
             userName = userReader.readLine();
             writer.write("Добро пожаловать, " + userName + "!\n");
             writer.flush();
-        } catch (IOException ignored) {}
+        } catch (IOException  ignored) {}
     }
 
     public void downService() {
@@ -84,16 +89,19 @@ public class ClientInstance {
                     inputMessage = userReader.readLine();
 
                     if (inputMessage.equals("exit")) {
-                        writer.write("exit" + "\n");
+                        writer.write("! Пользователь " + userName + " вышел из чата\n");
+                        writer.flush();
+                        System.out.println("Выход из чата...");
+                        Thread.sleep(1000);
                         ClientInstance.this.downService();
                         break;
                     } else {
-                        writer.write("(" + strTime + ") " + userName + ": " + inputMessage + "\n");
+                        writer.write("> (" + strTime + ") " + userName + ": " + inputMessage + "\n");
                     }
 
                     writer.flush();
 
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     ClientInstance.this.downService();
                 }
 

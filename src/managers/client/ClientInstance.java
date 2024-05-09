@@ -2,6 +2,7 @@ package managers.client;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,9 +40,9 @@ public class ClientInstance {
         }
 
         try {
-            userReader = new BufferedReader(new InputStreamReader(System.in));
-            reader  = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer  = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            userReader = new BufferedReader(new InputStreamReader(System.in, "Cp866"));
+            reader  = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
+            writer  = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "Cp866"));
 
             this.getUserName();
             new MessageReader().start();

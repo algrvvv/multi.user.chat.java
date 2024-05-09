@@ -4,6 +4,7 @@ import main.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ServerInstance extends Thread {
     /**
@@ -29,8 +30,8 @@ public class ServerInstance extends Thread {
     public ServerInstance(Socket socket) throws IOException {
         this.socket = socket;
 
-        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "Cp866"));
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
 
         // запуск нити
         this.start();

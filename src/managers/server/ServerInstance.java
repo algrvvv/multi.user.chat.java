@@ -4,7 +4,6 @@ import main.Server;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class ServerInstance extends Thread {
     /**
@@ -23,6 +22,11 @@ public class ServerInstance extends Thread {
     private final BufferedReader reader;
 
     /**
+     * Имя пользователя, который пользуется этим потоком для чата
+     */
+    private String userNickName;
+
+    /**
      * Конструтор для экземпляра
      *
      * @param socket сокет
@@ -34,7 +38,7 @@ public class ServerInstance extends Thread {
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "Cp866"));
 
         Server.store.printMessageStore(writer);
-        System.out.println("К чату подключился новый пользователь!");
+        System.out.println("К чату подключается новый пользователь!");
 
         // запуск нити
         this.start();
@@ -45,20 +49,25 @@ public class ServerInstance extends Thread {
         String word;
         try {
             word = reader.readLine();
+            this.userNickName =  word.replaceAll("Добро пожаловать, ", "").replaceAll("!", "");
+
             try {
                 writer.write(word + "\n");
                 writer.flush();
+
+                for (ServerInstance si : Server.serverInstances) {
+                    System.out.println("! Пользователь " + userNickName + " присоединился к чату!");
+                    Server.store.addMessageToStore("> Пользователь " + userNickName + " присоединился к чату!");
+                    si.sendMessage("! Пользователь " + userNickName + " присоединился к чату!");
+                }
             } catch (IOException ignored) {}
 
             try {
                 while (true) {
                     word = reader.readLine();
-                    if (word.equals("exit")) {
-                        this.downServerInstance();
-                        break;
-                    }
+                    if (word.equals("exit")) { this.downServerInstance(); break; }
 
-                    System.out.println("Сообщение: " + word);
+                    System.out.println("Сообщение: " + word + " -> ОТ: " + userNickName);
                     Server.store.addMessageToStore(word);
                     for (ServerInstance si : Server.serverInstances) {
                         si.sendMessage(word);
@@ -77,7 +86,7 @@ public class ServerInstance extends Thread {
         } catch (IOException ignored) {}
     }
 
-    private void downServerInstance() {
+    public void downServerInstance() {
         try {
             if (!socket.isClosed()) {
                 socket.close(); reader.close(); writer.close();
@@ -87,5 +96,14 @@ public class ServerInstance extends Thread {
                 }
             }
         } catch (IOException ignored) {}
+    }
+
+    /**
+     * Геттер на никнейм
+     *
+     * @return никнейм
+     */
+    public String getUserNickName() {
+        return this.userNickName;
     }
 }

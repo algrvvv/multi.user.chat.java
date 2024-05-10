@@ -51,7 +51,6 @@ public class ClientInstance {
 
             new MessageReader().start();
             new MessageWriter().start();
-            UserController.newUser(userName);
         } catch (IOException e) {
             ClientInstance.this.downService();
         }

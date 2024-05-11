@@ -88,6 +88,7 @@ public class ServerInstance extends Thread {
 
     public void downServerInstance() {
         try {
+            Server.decrementNumberOfUser();
             if (!socket.isClosed()) {
                 socket.close(); reader.close(); writer.close();
                 for (ServerInstance si : Server.serverInstances) {

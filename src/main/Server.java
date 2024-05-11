@@ -29,6 +29,11 @@ public class Server {
      */
     public static int maxNumberOfUser = 10;
 
+    /**
+     * Колво активных пользователей
+     */
+    private volatile static int numberOfUser = 0;
+
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) throws IOException {
         System.out.println("Запуск севера");
@@ -50,9 +55,13 @@ public class Server {
             while (true) {
                 Socket socket = server.accept();
                 try {
-                    if (serverInstances.size() + 1 <= maxNumberOfUser) {
+                    if (numberOfUser < maxNumberOfUser) {
+                        System.out.println(getNumberOfUser());
                         serverInstances.add(new ServerInstance(socket));
+                        incrementNumberOfUser();
+                        System.out.println(getNumberOfUser());
                     } else {
+                        System.out.println(getNumberOfUser());
                         System.out.println("Ошибка подключения нового пользователя в связи с ограничением максимального кол-ва пользователей");
                         socket.close();
                     }
@@ -61,5 +70,28 @@ public class Server {
                 }
             }
         }
+    }
+
+    /**
+     * Получение числа активных пользователей
+     *
+     * @return колво активных пользователей
+     */
+    public static int getNumberOfUser() {
+        return numberOfUser;
+    }
+
+    /**
+     * Метод для увеличения колва активных пользователей на одного
+     */
+    public static synchronized void incrementNumberOfUser() {
+        numberOfUser += 1;
+    }
+
+    /**
+     * Метод для уменьшнения колва активных пользователей на одного
+     */
+    public static synchronized void decrementNumberOfUser() {
+        numberOfUser -= 1;
     }
 }

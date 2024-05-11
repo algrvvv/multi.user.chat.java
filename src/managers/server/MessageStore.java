@@ -10,13 +10,22 @@ public class MessageStore {
      */
     private final LinkedList<String> store = new LinkedList<>();
 
+    private int MAX_NUMBER_OF_MESSAGE = 10;
+
+    public MessageStore() {
+    }
+
+    public MessageStore(int maxNumberOfMessage) {
+        this.MAX_NUMBER_OF_MESSAGE = maxNumberOfMessage;
+    }
+
     /**
      * Добавление нового сообщения в историю
      *
      * @param mess новое сообщение
      */
     public void addMessageToStore(String mess) {
-        if (this.store.size() > 10) {
+        if (this.store.size() > this.MAX_NUMBER_OF_MESSAGE) {
             this.store.removeFirst();
             this.store.add(mess);
         } else {
@@ -42,6 +51,15 @@ public class MessageStore {
                 writer.flush();
             } catch (IOException ignored) {}
         }
+    }
+
+    /**
+     * Геттер для колва сообщений
+     *
+     * @return колво сохранненых сообщений
+     */
+    public int getNumberOfMessage() {
+        return this.store.size();
     }
 
 }

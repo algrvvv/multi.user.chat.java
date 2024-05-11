@@ -25,7 +25,7 @@ public class MessageStore {
      * @param mess новое сообщение
      */
     public void addMessageToStore(String mess) {
-        if (this.store.size() > this.MAX_NUMBER_OF_MESSAGE) {
+        if (this.store.size() >= this.MAX_NUMBER_OF_MESSAGE) {
             this.store.removeFirst();
             this.store.add(mess);
         } else {
@@ -60,6 +60,10 @@ public class MessageStore {
      */
     public int getNumberOfMessage() {
         return this.store.size();
+    }
+
+    public void setMaxNumberOfMessage(int value) {
+        this.MAX_NUMBER_OF_MESSAGE = value;
     }
 
 }

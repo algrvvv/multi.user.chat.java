@@ -3,6 +3,7 @@ package managers.server;
 import main.Server;
 
 import java.io.BufferedReader;
+import java.util.Arrays;
 
 public class ServerCommand extends Thread{
     /**
@@ -40,8 +41,10 @@ public class ServerCommand extends Thread{
             case "config":  this.executeConfigCommand(); break;
             case "users": this.executeUsersCommand(); break;
             case "clear": this.executeClearCommand(); break;
-            case "change-config": break;
-            default: System.out.println("\n\nНет такой команды\n\n"); break;
+            default:
+                if (command.contains("change-config")) this.executeChangeConfigCommand(command);
+                else System.out.println("\n\nНет такой команды\n\n");
+                break;
         }
     }
 
@@ -77,6 +80,8 @@ public class ServerCommand extends Thread{
 
     /**
      * Метод для выполнения команды `config`
+     * <p>
+     * TODO можно вынести в enum
      */
     private void executeConfigCommand() {
         this.makeTitleForCommand("Конфигурация сервера");
@@ -95,8 +100,46 @@ public class ServerCommand extends Thread{
         this.makeFooterForCommand("Информация об активных пользователях".length());
     }
 
+    /**
+     * "Очистка" терминала для команды `clear`
+     */
     private void executeClearCommand() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    private void executeChangeConfigCommand(String commandString) {
+        String[] args = commandString.split(" ");
+        if (args.length < 3) {
+            System.out.println("Используйте /help, чтобы увидеть доступные команды\n");
+            return;
+        }
+
+        this.makeTitleForCommand("Изменение конфигцрации сервера");
+        switch (args[1]) {
+            case "max-users":
+                try {
+                    int oldValue = Server.MAX_NUMBER_OF_USERS;
+                    Server.MAX_NUMBER_OF_USERS = Integer.parseInt(args[2]);
+                    System.out.println("Максимальное колво пользователей изменено: " + oldValue + " -> " + args[2] + "\n");
+                } catch (Exception e) {
+                    System.out.println("Ошибка изменения\n\n");
+                }
+                break;
+            case "max-store":
+                try {
+                    int oldValue = Server.MAX_NUMBER_OF_MESSAGE;
+                    Server.MAX_NUMBER_OF_MESSAGE = Integer.parseInt(args[2]);
+                    Server.store.setMaxNumberOfMessage(Integer.parseInt(args[2]));
+                    System.out.println("Максимальное колво сообщений в хранилище изменено: " + oldValue + " -> " + args[2] + "\n");
+                } catch (Exception e) {
+                    System.out.println("Ошибка изменения\n\n");
+                }
+                break;
+            default:
+                System.out.println("Недоступная опция для изменения\n");
+        }
+
+        this.makeFooterForCommand("Изменение конфигцрации сервера".length());
     }
 }

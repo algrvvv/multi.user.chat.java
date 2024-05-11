@@ -1,5 +1,6 @@
 package managers.client;
 
+import main.Server;
 import managers.server.UserController;
 
 import java.io.*;
@@ -87,9 +88,11 @@ public class ClientInstance {
                     String strTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
                     inputMessage = userReader.readLine();
 
+                    // TODO при использовании ctrl + c в этот иф падает null
                     if (inputMessage.equals("exit")) {
                         writer.write("! Пользователь " + userName + " вышел из чата\n");
                         writer.flush();
+                        Server.decrementNumberOfUser();
                         System.out.println("Выход из чата...");
                         Thread.sleep(1000);
                         ClientInstance.this.downService();

@@ -3,7 +3,6 @@ package managers.server;
 import main.Server;
 
 import java.io.BufferedReader;
-import java.util.Arrays;
 
 public class ServerCommand extends Thread{
     /**
@@ -69,6 +68,9 @@ public class ServerCommand extends Thread{
 
     /* Дальше идут методы предназначенные только для выполнения команд  */
 
+    /**
+     * Метод для выполнения команды `help`
+     */
     private void executeHelpCommand() {
         this.makeTitleForCommand("Доступные команды");
         System.out.println("/config - просмотр конфигурации сервера");
@@ -97,6 +99,12 @@ public class ServerCommand extends Thread{
      */
     private void executeUsersCommand() {
         this.makeTitleForCommand("Информация об активных пользователях");
+        System.out.println("Активных пользователей: " + Server.getNumberOfUser() + "\n");
+        for (int i = 0; i < Server.serverInstances.size(); i++) {
+            ServerInstance si = Server.serverInstances.get(i);
+            System.out.println(i + 1 + ". " + si.getUserNickName() + "\t" + si.getJoinTime());
+        }
+        if (Server.getNumberOfUser() > 0) System.out.println();
         this.makeFooterForCommand("Информация об активных пользователях".length());
     }
 

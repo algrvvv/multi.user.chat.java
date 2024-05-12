@@ -6,10 +6,13 @@ import java.util.LinkedList;
 
 public class MessageStore {
     /**
-     * История сообщения хранит до 10 штук
+     * История сообщений
      */
     private final LinkedList<String> store = new LinkedList<>();
 
+    /**
+     * Максимальное колво сообщений, которые будут храниться в истории
+     */
     private int MAX_NUMBER_OF_MESSAGE = 10;
 
     public MessageStore() {
@@ -42,12 +45,12 @@ public class MessageStore {
     public void printMessageStore(BufferedWriter writer) {
         if (!this.store.isEmpty()) {
             try {
-                writer.write("История сообщений: " + "\n");
+                writer.write("\n\n==================\nИстория сообщений:\n==================\n\n");
                 for (String message : this.store) {
                     writer.write(message + "\n");
                 }
 
-                writer.write("\n");
+                writer.write("\n==================\n");
                 writer.flush();
             } catch (IOException ignored) {}
         }
@@ -62,6 +65,11 @@ public class MessageStore {
         return this.store.size();
     }
 
+    /**
+     * Сеттер для колва сообщений
+     *
+     * @param value новое значение
+     */
     public void setMaxNumberOfMessage(int value) {
         this.MAX_NUMBER_OF_MESSAGE = value;
     }

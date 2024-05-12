@@ -4,6 +4,8 @@ import main.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ServerInstance extends Thread {
     /**
@@ -25,6 +27,8 @@ public class ServerInstance extends Thread {
      * Имя пользователя, который пользуется этим потоком для чата
      */
     private String userNickName;
+
+    private String joinTime;
 
     /**
      * Конструтор для экземпляра
@@ -50,14 +54,15 @@ public class ServerInstance extends Thread {
         try {
             word = reader.readLine();
             this.userNickName =  word.replaceAll("Добро пожаловать, ", "").replaceAll("!", "");
+            this.joinTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 
             try {
-                writer.write(word + "\n");
+                writer.write("\n" + word + "\n\n");
                 writer.flush();
 
                 for (ServerInstance si : Server.serverInstances) {
                     System.out.println("! Пользователь " + userNickName + " присоединился к чату!");
-                    Server.store.addMessageToStore("> Пользователь " + userNickName + " присоединился к чату!");
+                    Server.store.addMessageToStore("! Пользователь " + userNickName + " присоединился к чату!");
                     si.sendMessage("! Пользователь " + userNickName + " присоединился к чату!");
                 }
             } catch (IOException ignored) {}
@@ -106,5 +111,14 @@ public class ServerInstance extends Thread {
      */
     public String getUserNickName() {
         return this.userNickName;
+    }
+
+    /**
+     * Геттер на время присоединения к чату
+     *
+     * @return время присоединения
+     */
+    public String getJoinTime () {
+        return this.joinTime;
     }
 }

@@ -88,7 +88,7 @@ public class ClientInstance {
                     String strTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
                     inputMessage = userReader.readLine();
 
-                    // TODO при использовании ctrl + c в этот иф падает null
+                    // TODO при использовании `ctrl + c` в этот иф падает null
                     if (inputMessage.equals("exit")) {
                         writer.write("! Пользователь " + userName + " вышел из чата\n");
                         writer.flush();
